@@ -6,5 +6,7 @@ const retrieveUser = require('../middlewares/userMiddleware');
 const router = Router({mergeParams: true});
 
 router.post('/', verifyToken, retrieveUser, commentController.createComment);
+router.delete('/:commentId', verifyToken, retrieveUser, commentController.deleteComment);
+router.put('/:commentId', verifyToken, retrieveUser, commentController.updateComment);
 
 module.exports = router;
