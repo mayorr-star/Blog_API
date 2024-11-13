@@ -10,10 +10,11 @@ const deleteCommentByPostId = async (postId) => {
   });
 };
 
-const deleteComment = async (id) => {
+const deleteComment = async (id, authorId) => {
   await prisma.comment.delete({
     where: {
       id: id,
+      authorId: authorId,
     },
   });
 };
@@ -29,4 +30,21 @@ const createComment = async (content, authorId, postId) => {
   return comment;
 };
 
-module.exports = { deleteCommentByPostId, deleteComment, createComment };
+const updateComment = async (id, authorId, content) => {
+  await prisma.comment.update({
+    where: {
+      id: id,
+      authorId: authorId,
+    },
+    data: {
+      content: content,
+    },
+  });
+};
+
+module.exports = {
+  deleteCommentByPostId,
+  deleteComment,
+  createComment,
+  updateComment,
+};
