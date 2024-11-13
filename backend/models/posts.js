@@ -1,8 +1,10 @@
 const { PrismaClient } = require("@prisma/client");
+const asyncHandler = require("express-async-handler");
+const { NotFoundError } = require("../middlewares/errors/errorHandlers");
 
 const prisma = new PrismaClient();
 
-const getAllPosts = async () => {
+const getAllPosts = asyncHandler(async () => {
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },
     include: {
@@ -13,10 +15,11 @@ const getAllPosts = async () => {
       },
     },
   });
+  if (!posts) throw new NotFoundError("Posts not found");
   return posts;
-};
+});
 
-const getPostById = async (id) => {
+const getPostById = asyncHandler(async (id) => {
   const post = await prisma.post.findUnique({
     where: { id: id },
     include: {
@@ -30,41 +33,52 @@ const getPostById = async (id) => {
       },
     },
   });
+  if (!post) throw new NotFoundError("Post not found");
   return post;
-};
+});
 
-const createPost = async (title, content, authorId, published = false) => {
-  const post = await prisma.post.create({
-    data: {
-      title: title,
-      content: content,
-      authorId: authorId,
-      published: published,
-    },
-  });
-  return post;
-};
+const createPost = asyncHandler(
+  async (title, content, authorId, published = false) => {
+    const post = await prisma.post.create({
+      data: {
+        title: title,
+        content: content,
+        authorId: authorId,
+        published: published,
+      },
+    });
+    return post;
+  }
+);
 
-const updatePost = async (title, content, id, published = false) => {
-  const post = await prisma.post.update({
-    where: {
-      id: id,
-    },
-    data: {
-      title: title,
-      content: content,
-      published: published,
-    },
-  });
-  return post;
-};
+const updatePost = asyncHandler(
+  async (title, content, id, published = false) => {
+    const post = await prisma.post.update({
+      where: {
+        id: id,
+      },
+      data: {
+        title: title,
+        content: content,
+        published: published,
+      },
+    });
+    return post;
+  }
+);
 
-const deletePost = async (id) => {
+const deletePost = asyncHandler(async (id) => {
   await prisma.post.delete({
     where: {
       id: id,
     },
   });
-};
+});
 
-module.exports = { getAllPosts, getPostById, createPost, updatePost, deletePost };
+module.exports = {
+  getAllPosts,
+  getPostById,
+  createPost,
+  updatePost,
+  deletePost,
+};
