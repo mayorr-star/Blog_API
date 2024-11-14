@@ -16,8 +16,8 @@ const signIn = async (req, res) => {
   if (!user) 
     return res.status(401).json({ error: "Username or Password is incorrect" });
 
-  // const isPasswordValid = await bycrypt.compare(password, user.password);
-  // if (!isPasswordValid) return res.status(401).json({error: 'Username or Password is incorrect'});
+  const isPasswordValid = await bycrypt.compare(password, user.password);
+  if (!isPasswordValid) return res.status(401).json({error: 'Username or Password is incorrect'});
 
   jwt.sign(
     { user },
