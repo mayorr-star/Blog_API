@@ -16,13 +16,12 @@ async function main() {
         password: faker.internet.password(),
       },
     });
-    console.log(user) 
 
     // Create posts
     const post = await prisma.post.create({
       data: {
-        title: faker.lorem.lines({min: 1, max: 3}),
-        content: faker.lorem.paragraphs({min: 5, max: 10}),
+        title: faker.lorem.lines({min: 1, max: 15}),
+        content: faker.lorem.paragraphs({min: 50, max: 200}),
         author: { connect: { id: user.id } },
         published: true
       },
@@ -31,7 +30,7 @@ async function main() {
     // Create comments
     const comment = await prisma.comment.create({
       data: {
-        content: faker.lorem.paragraphs({min: 5, max: 10}),
+        content: faker.lorem.paragraphs({min: 50, max: 200}),
         post: { connect: { id: post.id } },
         author: { connect: { id: user.id } },
       },
