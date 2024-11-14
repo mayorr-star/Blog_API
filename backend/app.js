@@ -1,11 +1,18 @@
 const express = require("express");
-require("dotenv").config();
+const cors = require("cors");
 const postRouter = require("./routes/postRouter");
 const authRouter = require("./routes/authRouter");
-const commentRouter = require('./routes/commentRouter');
-const { handleNotFoundError, handleServerError} = require('./middlewares/errors/middlewares');
+const commentRouter = require("./routes/commentRouter");
+const {
+  handleNotFoundError,
+  handleServerError,
+} = require("./middlewares/errors/middlewares");
+
+require("dotenv").config();
 
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
