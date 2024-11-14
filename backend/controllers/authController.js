@@ -22,7 +22,7 @@ const signIn = async (req, res) => {
   jwt.sign(
     { user },
     process.env.JWT_SECRET_KEY,
-    { expiresIn: "24h" },
+    { expiresIn: "3h" },
     (err, token) => {
       res.json({ token });
     }
